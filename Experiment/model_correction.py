@@ -6,22 +6,22 @@ from model import *
 q = 48
 isTrainAB = False
 isTrainC = False
-if os.path.exists("./file/PUMP_AB_model.pickle") and isTrainAB is False:
-    with open("./file/PUMP_AB_model.pickle", "rb") as f:
+if os.path.exists(f"{File_PATH}/PUMP_AB_model.pickle") and isTrainAB is False:
+    with open(f"{File_PATH}/PUMP_AB_model.pickle", "rb") as f:
         models_DMA_AB = pickle.load(f)
 else:
-    no_leak_dataset, leak_dataset, pump_flow, pressure = get_dataset("no_leak_dataset_2018", "PUMP_DMA_C")
+    no_leak_dataset, leak_dataset, pump_flow, pressure = get_dataset(f"{File_PATH}/no_leak_dataset_2018.pickle", f"{File_PATH}/PUMP_DMA_AB.pickle")
     models_DMA_AB = { sensor: train_pump_model(pressure[sensor], pump_flow, q=q) for sensor in DMA_AB_sensors }
-    with open("./file/PUMP_AB_model.pickle", "wb") as f:
+    with open(f"{File_PATH}/PUMP_AB_model.pickle", "wb") as f:
         pickle.dump(models_DMA_AB, f)
 
-if os.path.exists("./file/PUMP_C_model.pickle") and isTrainC is False:
-    with open("./file/PUMP_C_model.pickle", "rb") as f:
+if os.path.exists(f"{File_PATH}/PUMP_C_model.pickle") and isTrainC is False:
+    with open(f"{File_PATH}/PUMP_C_model.pickle", "rb") as f:
         models_DMA_C = pickle.load(f)
 else:
-    no_leak_dataset, leak_dataset, pump_flow, pressure = get_dataset("no_leak_dataset_2018", "PUMP_DMA_AB")
+    no_leak_dataset, leak_dataset, pump_flow, pressure = get_dataset(f"{File_PATH}/no_leak_dataset_2018.pickle", f"{File_PATH}/PUMP_DMA_C.pickle")
     models_DMA_C = { sensor: train_pump_model(pressure[sensor], pump_flow, q=q) for sensor in DMA_C_sensors }
-    with open("./file/PUMP_C_model.pickle", "wb") as f:
+    with open(f"{File_PATH}/PUMP_C_model.pickle", "wb") as f:
         pickle.dump(models_DMA_C, f)
 
 
